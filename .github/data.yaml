@@ -1,0 +1,23 @@
+name: My Auto Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # Gets your code
+      
+      - name: Install Python and Boto3
+        run: |
+          pip install boto3
+
+      - name: Run the script
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        run: python deploy.py
